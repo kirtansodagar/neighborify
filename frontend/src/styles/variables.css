@@ -1,0 +1,286 @@
+/* ==========================================================
+   Neighborify — Design System Tokens
+   Premium, Instagram-quality design with light & dark modes
+   ========================================================== */
+
+:root {
+  /* ===== Brand Colors ===== */
+  --color-primary: #10B981;
+  --color-primary-hover: #059669;
+  --color-primary-active: #047857;
+  --color-primary-light: #D1FAE5;
+  --color-primary-lighter: #ECFDF5;
+  --color-primary-dark: #065F46;
+  --color-primary-alpha-10: rgba(16, 185, 129, 0.10);
+  --color-primary-alpha-20: rgba(16, 185, 129, 0.20);
+  --color-primary-alpha-30: rgba(16, 185, 129, 0.30);
+
+  /* ===== Social Story Gradient ===== */
+  --gradient-story: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  --gradient-story-hover: linear-gradient(45deg, #e0852e, #d65d36, #c9233c, #b81f5a, #a8167a);
+
+  /* ===== Light Theme (Default) ===== */
+  --color-bg: #FAFAFA;
+  --color-bg-secondary: #F0F0F0;
+  --color-bg-tertiary: #E8E8E8;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8F8F8;
+  --color-card: #FFFFFF;
+  --color-card-hover: #FAFAFA;
+  --color-modal-overlay: rgba(0, 0, 0, 0.50);
+  --color-modal-backdrop: rgba(0, 0, 0, 0.30);
+
+  --color-text: #1A1A1A;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-text-inverse: #FFFFFF;
+  --color-text-link: #10B981;
+
+  --color-border: #DBDBDB;
+  --color-border-light: #EFEFEF;
+  --color-border-hover: #C8C8C8;
+  --color-divider: #EAEAEA;
+
+  /* ===== Semantic Colors ===== */
+  --color-danger: #EF4444;
+  --color-danger-hover: #DC2626;
+  --color-danger-light: #FEE2E2;
+  --color-danger-alpha-10: rgba(239, 68, 68, 0.10);
+
+  --color-warning: #F59E0B;
+  --color-warning-hover: #D97706;
+  --color-warning-light: #FEF3C7;
+  --color-warning-alpha-10: rgba(245, 158, 11, 0.10);
+
+  --color-success: #10B981;
+  --color-success-hover: #059669;
+  --color-success-light: #D1FAE5;
+  --color-success-alpha-10: rgba(16, 185, 129, 0.10);
+
+  --color-info: #3B82F6;
+  --color-info-hover: #2563EB;
+  --color-info-light: #DBEAFE;
+  --color-info-alpha-10: rgba(59, 130, 246, 0.10);
+
+  /* ===== Shadows ===== */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.10), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.20);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-story: 0 0 0 2px #FFFFFF, 0 0 0 4px rgba(16, 185, 129, 0.30);
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.10);
+  --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.18);
+  --shadow-toast: 0 8px 32px rgba(0, 0, 0, 0.14);
+
+  /* ===== Animation Timing ===== */
+  --duration-instant: 0ms;
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  --duration-slowest: 800ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --transition-fast: var(--duration-fast) var(--ease-out);
+  --transition-normal: var(--duration-normal) var(--ease-out);
+  --transition-slow: var(--duration-slow) var(--ease-out);
+  --transition-spring: var(--duration-slow) var(--ease-spring);
+  --transition-theme: background-color var(--duration-normal) var(--ease-out),
+                       color var(--duration-normal) var(--ease-out),
+                       border-color var(--duration-normal) var(--ease-out),
+                       box-shadow var(--duration-normal) var(--ease-out);
+
+  /* ===== Z-Index Scale ===== */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+  --z-loading: 900;
+
+  /* ===== Border Radius ===== */
+  --radius-none: 0;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  --radius-avatar: var(--radius-full);
+  --radius-button: var(--radius-sm);
+  --radius-card: var(--radius-lg);
+  --radius-input: var(--radius-sm);
+  --radius-modal: var(--radius-xl);
+  --radius-story: var(--radius-full);
+  --radius-pill: var(--radius-full);
+
+  /* ===== Typography ===== */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', Consolas,
+               'Courier New', monospace;
+
+  --font-weight-thin: 100;
+  --font-weight-extralight: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  --font-size-xs: 0.625rem;   /* 10px */
+  --font-size-sm: 0.75rem;    /* 12px */
+  --font-size-base: 0.875rem; /* 14px */
+  --font-size-md: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.06em;
+
+  /* ===== Spacing (4px base scale) ===== */
+  --space-0: 0;
+  --space-0-5: 2px;
+  --space-1: 4px;
+  --space-1-5: 6px;
+  --space-2: 8px;
+  --space-2-5: 10px;
+  --space-3: 12px;
+  --space-3-5: 14px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-11: 44px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-px: 1px;
+
+  /* ===== Layout ===== */
+  --max-width-container: 480px;
+  --max-width-content: 680px;
+  --max-width-wide: 1200px;
+
+  --header-height: 52px;
+  --bottom-nav-height: 56px;
+  --story-height: 100px;
+  --input-height: 44px;
+  --button-height-sm: 32px;
+  --button-height-md: 40px;
+  --button-height-lg: 48px;
+
+  /* ===== Opacity ===== */
+  --opacity-disabled: 0.40;
+  --opacity-muted: 0.60;
+  --opacity-subtle: 0.80;
+  --opacity-overlay: 0.50;
+
+  /* ===== Misc ===== */
+  --avatar-size-xs: 24px;
+  --avatar-size-sm: 32px;
+  --avatar-size-md: 40px;
+  --avatar-size-lg: 56px;
+  --avatar-size-xl: 72px;
+  --avatar-size-story: 64px;
+
+  --icon-size-xs: 14px;
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --icon-size-xl: 28px;
+
+  --story-ring-size: 68px;
+  --story-border-width: 2px;
+}
+
+/* ==========================================================
+   Dark Theme
+   ========================================================== */
+
+[data-theme="dark"] {
+  --color-bg: #121212;
+  --color-bg-secondary: #1A1A1A;
+  --color-bg-tertiary: #222222;
+  --color-surface: #1E1E1E;
+  --color-surface-hover: #282828;
+  --color-card: #262626;
+  --color-card-hover: #2E2E2E;
+  --color-modal-overlay: rgba(0, 0, 0, 0.70);
+  --color-modal-backdrop: rgba(0, 0, 0, 0.50);
+
+  --color-text: #F5F5F5;
+  --color-text-secondary: #A0A0A0;
+  --color-text-tertiary: #6B7280;
+  --color-text-inverse: #1A1A1A;
+  --color-text-link: #34D399;
+
+  --color-border: #2E2E2E;
+  --color-border-light: #262626;
+  --color-border-hover: #404040;
+  --color-divider: #2A2A2A;
+
+  --color-primary-hover: #34D399;
+  --color-primary-active: #6EE7B7;
+  --color-primary-light: #064E3B;
+  --color-primary-lighter: #022C22;
+  --color-primary-dark: #D1FAE5;
+  --color-primary-alpha-10: rgba(16, 185, 129, 0.15);
+  --color-primary-alpha-20: rgba(16, 185, 129, 0.25);
+  --color-primary-alpha-30: rgba(16, 185, 129, 0.35);
+
+  --color-danger-light: #7F1D1D;
+  --color-warning-light: #78350F;
+  --color-success-light: #064E3B;
+  --color-info-light: #1E3A5F;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.40), 0 2px 4px -1px rgba(0, 0, 0, 0.30);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -2px rgba(0, 0, 0, 0.30);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.50), 0 10px 10px -5px rgba(0, 0, 0, 0.30);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.60);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.30);
+  --shadow-story: 0 0 0 2px #121212, 0 0 0 4px rgba(16, 185, 129, 0.40);
+  --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 2px 8px rgba(0, 0, 0, 0.40);
+  --shadow-card-hover: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 8px 24px rgba(0, 0, 0, 0.50);
+  --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.50);
+  --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.60);
+  --shadow-toast: 0 8px 32px rgba(0, 0, 0, 0.50);
+}
