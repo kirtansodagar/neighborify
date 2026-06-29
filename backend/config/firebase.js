@@ -5,22 +5,21 @@ let firebaseAdmin = null;
 let messaging = null;
 
 try {
-  if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+  const { FIREBASE_PROJECT_ID, FIREBASE_PRIVATE_KEY, FIREBASE_CLIENT_EMAIL } = process.env;
+  const isValidKey = FIREBASE_PRIVATE_KEY && FIREBASE_PRIVATE_KEY.includes('BEGIN') && FIREBASE_PRIVATE_KEY.includes('PRIVATE KEY');
+
+  if (FIREBASE_PROJECT_ID && isValidKey && FIREBASE_CLIENT_EMAIL) {
+    const privateKey = FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
 
     firebaseAdmin = admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        privateKey,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL
-      })
+      credential: admin.credential.cert({ projectId: FIREBASE_PROJECT_ID, privateKey, clientEmail: FIREBASE_CLIENT_EMAIL })
     });
     messaging = firebaseAdmin.messaging();
   } else {
-    logger.error('Firebase Admin SDK initialization skipped because required environment variables are missing');
+    logger.warn('Firebase Admin SDK skipped — push notifications disabled');
   }
 } catch (err) {
-  logger.error(`Firebase Admin SDK initialization failed: ${err.message}`);
+  logger.warn(`Firebase Admin SDK skipped — ${err.message}`);
   firebaseAdmin = null;
   messaging = null;
 }

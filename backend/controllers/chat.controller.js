@@ -43,7 +43,9 @@ export const getChat = async (req, res) => {
 export const sendMessage = async (req, res) => {
   try {
     const { chatId, content } = req.body;
-    if (!chatId || !content) return error(res, 'Chat ID and content required', 400);
+    if (!chatId || !content || typeof content !== 'string') return error(res, 'Chat ID and content required', 400);
+    const trimmed = content.trim().substring(0, 5000);
+    if (!trimmed) return error(res, 'Message cannot be empty', 400);
     const chat = await Chat.findById(chatId);
     if (!chat) return error(res, 'Chat not found', 404);
     if (!chat.participants.some(p => p.equals(req.user._id))) return error(res, 'Not authorized', 403);

@@ -6,8 +6,11 @@ import { paginate } from '../utils/apiResponse.js';
 export const createEvent = async (req, res) => {
   try {
     const { title, description, eventType, location, startDate, endDate, maxAttendees, isPaid, price } = req.body;
+    if (!title || typeof title !== 'string') return error(res, 'Title required', 400);
+    const trimmedTitle = title.trim().substring(0, 200);
+    const trimmedDesc = description ? String(description).trim().substring(0, 5000) : '';
     const event = await Event.create({
-      title, description, eventType, location, startDate, endDate,
+      title: trimmedTitle, description: trimmedDesc, eventType, location, startDate, endDate,
       maxAttendees, isPaid, price,
       author: req.user._id, pincode: req.user.pincode,
     });

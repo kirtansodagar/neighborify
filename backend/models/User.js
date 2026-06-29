@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
   postsCount: { type: Number, default: 0 },
   refreshToken: { type: String, select: false },
   fcmToken: { type: String, default: '' },
+  loginAttempts: { type: Number, default: 0, select: false },
+  lockUntil: { type: Date, select: false },
+  otp: { type: String, select: false },
+  otpExpires: { type: Date, select: false },
 }, { timestamps: true });
 
 userSchema.index({ pincode: 1 });
@@ -39,6 +43,11 @@ userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;
   delete obj.refreshToken;
+  delete obj.fcmToken;
+  delete obj.otp;
+  delete obj.otpExpires;
+  delete obj.loginAttempts;
+  delete obj.lockUntil;
   delete obj.__v;
   return obj;
 };

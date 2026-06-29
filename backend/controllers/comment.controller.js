@@ -9,9 +9,11 @@ export const createComment = async (req, res) => {
   try {
     const { text, parentComment } = req.body;
     const { postId, forumId } = req.params;
-    if (!text) return error(res, 'Text required', 400);
+    if (!text || typeof text !== 'string') return error(res, 'Text required', 400);
+    const trimmedText = text.trim().substring(0, 5000);
+    if (!trimmedText) return error(res, 'Comment cannot be empty', 400);
     const comment = await Comment.create({
-      text,
+      text: trimmedText,
       author: req.user._id,
       post: postId || undefined,
       forum: forumId || undefined,

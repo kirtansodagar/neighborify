@@ -18,7 +18,10 @@ export const searchUsers = async (req, res) => {
   try {
     const { q, pincode, page = 1, limit = 20 } = req.query;
     const query = {};
-    if (q) query.name = { $regex: q, $options: 'i' };
+    if (q) {
+      const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      query.name = { $regex: safeQ, $options: 'i' };
+    }
     if (pincode) query.pincode = pincode;
     const skip = (page - 1) * limit;
     const [users, total] = await Promise.all([

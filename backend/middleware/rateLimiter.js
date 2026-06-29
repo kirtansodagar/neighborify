@@ -15,3 +15,4 @@ export const globalLimiter = createLimiter(15 * 60 * 1000, 100, 'Too many reques
 export const otpLimiter = createLimiter(60 * 60 * 1000, 5, 'Too many OTP requests, please try again later');
 export const uploadLimiter = createLimiter(60 * 60 * 1000, 20, 'Too many upload requests, please try again later');
 export const authLimiter = createLimiter(15 * 60 * 1000, 10, 'Too many authentication requests, please try again later');
+export const refreshLimiter = createLimiter(15 * 60 * 1000, 20, 'Too many token refresh requests, please try again later');

@@ -5,8 +5,11 @@ import { paginate } from '../utils/apiResponse.js';
 export const createListing = async (req, res) => {
   try {
     const { title, description, price, category, condition } = req.body;
+    if (!title || typeof title !== 'string') return error(res, 'Title required', 400);
+    const trimmedTitle = title.trim().substring(0, 200);
+    const trimmedDesc = description ? String(description).trim().substring(0, 5000) : '';
     const listing = await Listing.create({
-      title, description, price, category, condition,
+      title: trimmedTitle, description: trimmedDesc, price: Number(price) || 0, category, condition,
       seller: req.user._id, pincode: req.user.pincode,
       expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     });
@@ -33,7 +36,10 @@ export const getListings = async (req, res) => {
       if (minPrice) query.price.$gte = Number(minPrice);
       if (maxPrice) query.price.$lte = Number(maxPrice);
     }
-    if (q) query.title = { $regex: q, $options: 'i' };
+    if (q) {
+      const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      query.title = { $regex: safeQ, $options: 'i' };
+    }
     const skip = (page - 1) * limit;
     const [listings, total] = await Promise.all([
       Listing.find(query).sort({ isFeatured: -1, createdAt: -1 }).skip(skip).limit(Number(limit)).populate('seller', 'name avatar'),

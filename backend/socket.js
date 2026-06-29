@@ -49,11 +49,13 @@ export function initializeSocket(server) {
     socket.on('chat:message', async (data) => {
       try {
         const { chatId, content } = data;
-        if (!chatId || !content) return;
+        if (!chatId || !content || typeof content !== 'string') return;
+        const trimmed = content.trim().substring(0, 5000);
+        if (!trimmed) return;
         const chat = await Chat.findById(chatId);
         if (!chat || !chat.participants.some(p => p.toString() === socket.userId)) return;
-        const message = await Message.create({ chat: chatId, sender: socket.userId, content });
-        chat.lastMessage = { content, sender: socket.userId, sentAt: new Date() };
+        const message = await Message.create({ chat: chatId, sender: socket.userId, content: trimmed });
+        chat.lastMessage = { content: trimmed, sender: socket.userId, sentAt: new Date() };
         await chat.save();
         const populated = await message.populate('sender', 'name avatar');
         io.to(`chat:${chatId}`).emit('chat:message', populated);
@@ -70,21 +72,16 @@ export function initializeSocket(server) {
 
     socket.on('chat:typing', (data) => {
       const { chatId, isTyping } = data;
+      if (!chatId || typeof isTyping !== 'boolean') return;
       socket.to(`chat:${chatId}`).emit('chat:typing', { userId: socket.userId, isTyping });
     });
 
     socket.on('post:liked', (data) => {
       const { postId, authorId } = data;
-      if (authorId !== socket.userId) {
-        io.to(`user:${authorId}`).emit('notification', {
-          type: 'like', title: 'Someone liked your post', referenceId: postId, referenceModel: 'Post',
-        });
-      }
-    });
-
-    socket.on('notification:send', (data) => {
-      const { userId, title, message, type, referenceId, referenceModel } = data;
-      io.to(`user:${userId}`).emit('notification', { type, title, message, referenceId, referenceModel });
+      if (!postId || !authorId || authorId === socket.userId) return;
+      io.to(`user:${authorId}`).emit('notification', {
+        type: 'like', title: 'Someone liked your post', referenceId: postId, referenceModel: 'Post',
+      });
     });
 
     socket.on('disconnect', () => {

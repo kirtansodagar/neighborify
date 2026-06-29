@@ -1,4 +1,5 @@
 import Forum from '../models/Forum.js';
+import Comment from '../models/Comment.js';
 import { success, error } from '../utils/apiResponse.js';
 import { paginate } from '../utils/apiResponse.js';
 import { forumCache } from '../utils/cache.js';
@@ -6,8 +7,13 @@ import { forumCache } from '../utils/cache.js';
 export const createForum = async (req, res) => {
   try {
     const { title, content, category, tags } = req.body;
+    if (!title || typeof title !== 'string' || !content || typeof content !== 'string') {
+      return error(res, 'Title and content required', 400);
+    }
+    const trimmedTitle = title.trim().substring(0, 200);
+    const trimmedContent = content.trim().substring(0, 10000);
     const forum = await Forum.create({
-      title, content, category: category || 'general', tags: tags || [],
+      title: trimmedTitle, content: trimmedContent, category: category || 'general', tags: tags || [],
       author: req.user._id, pincode: req.user.pincode,
     });
     forumCache.delete(`forum:${req.user.pincode}`);

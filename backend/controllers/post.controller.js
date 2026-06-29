@@ -9,8 +9,11 @@ import { feedCache } from '../utils/cache.js';
 export const createPost = async (req, res) => {
   try {
     const { content, type, alertType, pollData } = req.body;
+    if (!content || typeof content !== 'string') return error(res, 'Content required', 400);
+    const trimmedContent = content.trim().substring(0, 5000);
+    if (!trimmedContent) return error(res, 'Content cannot be empty', 400);
     const postData = {
-      content,
+      content: trimmedContent,
       author: req.user._id,
       pincode: req.user.pincode,
       type: type || 'text',
