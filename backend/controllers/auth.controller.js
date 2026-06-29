@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import { success, error } from '../utils/apiResponse.js';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
+import { auditFailedLogin, auditSuccessfulLogin } from '../utils/audit.js';
 
 const MAX_LOGIN_ATTEMPTS = 5;
 const LOCK_TIME = 15 * 60 * 1000;
@@ -39,6 +40,7 @@ export const login = async (req, res) => {
 
     if (user.lockUntil && user.lockUntil > Date.now()) {
       const waitMin = Math.ceil((user.lockUntil - Date.now()) / 60000);
+      auditFailedLogin(phone, 'account_locked');
       return error(res, `Account locked. Try again in ${waitMin} minute(s)`, 423);
     }
 
@@ -52,6 +54,7 @@ export const login = async (req, res) => {
         user.loginAttempts = 0;
       }
       await user.save({ validateBeforeSave: false });
+      auditFailedLogin(phone, 'wrong_password');
       return error(res, 'Invalid credentials', 401);
     }
 
@@ -64,6 +67,7 @@ export const login = async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
+    auditSuccessfulLogin(user._id);
     return success(res, 'Login successful', { user, accessToken, refreshToken });
   } catch (err) {
     return error(res, err.message, 500);

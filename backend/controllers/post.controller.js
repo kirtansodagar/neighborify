@@ -5,6 +5,7 @@ import { success, error } from '../utils/apiResponse.js';
 import { paginate } from '../utils/apiResponse.js';
 import { computeFeedScore, computePincodeAverageEngagement } from '../utils/feedAlgorithm.js';
 import { feedCache } from '../utils/cache.js';
+import { sanitizeBody } from '../utils/sanitize.js';
 
 export const createPost = async (req, res) => {
   try {
@@ -12,8 +13,9 @@ export const createPost = async (req, res) => {
     if (!content || typeof content !== 'string') return error(res, 'Content required', 400);
     const trimmedContent = content.trim().substring(0, 5000);
     if (!trimmedContent) return error(res, 'Content cannot be empty', 400);
+    const cleanContent = sanitizeBody(trimmedContent);
     const postData = {
-      content: trimmedContent,
+      content: cleanContent,
       author: req.user._id,
       pincode: req.user.pincode,
       type: type || 'text',
@@ -73,7 +75,13 @@ export const updatePost = async (req, res) => {
     if (!post.author.equals(req.user._id) && req.user.role !== 'admin') return error(res, 'Not authorized', 403);
     const allowed = ['content', 'alertType'];
     for (const key of allowed) {
-      if (req.body[key] !== undefined) post[key] = req.body[key];
+      if (req.body[key] !== undefined) {
+        if (key === 'content' && typeof req.body[key] === 'string') {
+          post[key] = sanitizeBody(req.body[key]);
+        } else {
+          post[key] = req.body[key];
+        }
+      }
     }
     await post.save();
     feedCache.delete(`feed:${post.pincode}`);

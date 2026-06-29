@@ -1,8 +1,8 @@
 import Comment from '../models/Comment.js';
 import Post from '../models/Post.js';
-import Forum from '../models/Forum.js';
 import Notification from '../models/Notification.js';
 import { success, error } from '../utils/apiResponse.js';
+import { sanitizeBody } from '../utils/sanitize.js';
 import { paginate } from '../utils/apiResponse.js';
 
 export const createComment = async (req, res) => {
@@ -12,8 +12,9 @@ export const createComment = async (req, res) => {
     if (!text || typeof text !== 'string') return error(res, 'Text required', 400);
     const trimmedText = text.trim().substring(0, 5000);
     if (!trimmedText) return error(res, 'Comment cannot be empty', 400);
+    const sanitizedText = sanitizeBody(trimmedText);
     const comment = await Comment.create({
-      text: trimmedText,
+      text: sanitizedText,
       author: req.user._id,
       post: postId || undefined,
       forum: forumId || undefined,

@@ -1,6 +1,7 @@
 import Forum from '../models/Forum.js';
 import Comment from '../models/Comment.js';
 import { success, error } from '../utils/apiResponse.js';
+import { sanitizeTitle, sanitizeBody } from '../utils/sanitize.js';
 import { paginate } from '../utils/apiResponse.js';
 import { forumCache } from '../utils/cache.js';
 
@@ -12,8 +13,10 @@ export const createForum = async (req, res) => {
     }
     const trimmedTitle = title.trim().substring(0, 200);
     const trimmedContent = content.trim().substring(0, 10000);
+    const cleanTitle = sanitizeTitle(trimmedTitle);
+    const cleanContent = sanitizeBody(trimmedContent);
     const forum = await Forum.create({
-      title: trimmedTitle, content: trimmedContent, category: category || 'general', tags: tags || [],
+      title: cleanTitle, content: cleanContent, category: category || 'general', tags: tags || [],
       author: req.user._id, pincode: req.user.pincode,
     });
     forumCache.delete(`forum:${req.user.pincode}`);

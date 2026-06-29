@@ -47,6 +47,14 @@ export const objectIdValidator = (fieldName) => param(fieldName)
   .custom((value) => mongoose.Types.ObjectId.isValid(value))
   .withMessage(`${fieldName} must be a valid MongoDB ObjectId`);
 
+export const validateObjectId = (fieldName = 'id') => (req, res, next) => {
+  const value = req.params[fieldName];
+  if (!value || !mongoose.Types.ObjectId.isValid(value)) {
+    return res.status(400).json({ success: false, message: `Invalid ${fieldName}` });
+  }
+  next();
+};
+
 export const paginationValidator = [
   query('page')
     .optional()

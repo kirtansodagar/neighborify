@@ -1,7 +1,7 @@
 import Chat from '../models/Chat.js';
 import Message from '../models/Message.js';
-import Notification from '../models/Notification.js';
 import { success, error } from '../utils/apiResponse.js';
+import { sanitizeBody } from '../utils/sanitize.js';
 import { paginate } from '../utils/apiResponse.js';
 
 export const createChat = async (req, res) => {
@@ -46,16 +46,17 @@ export const sendMessage = async (req, res) => {
     if (!chatId || !content || typeof content !== 'string') return error(res, 'Chat ID and content required', 400);
     const trimmed = content.trim().substring(0, 5000);
     if (!trimmed) return error(res, 'Message cannot be empty', 400);
+    const cleanContent = sanitizeBody(trimmed);
     const chat = await Chat.findById(chatId);
     if (!chat) return error(res, 'Chat not found', 404);
     if (!chat.participants.some(p => p.equals(req.user._id))) return error(res, 'Not authorized', 403);
-    const message = await Message.create({ chat: chatId, sender: req.user._id, content });
-    chat.lastMessage = { content, sender: req.user._id, sentAt: new Date() };
+    const message = await Message.create({ chat: chatId, sender: req.user._id, content: cleanContent });
+    chat.lastMessage = { content: cleanContent, sender: req.user._id, sentAt: new Date() };
     await chat.save();
     const populated = await message.populate('sender', 'name avatar');
     const otherParticipants = chat.participants.filter(p => !p.equals(req.user._id));
     for (const userId of otherParticipants) {
-      await Notification.create({ recipient: userId, type: 'message', title: 'New message', message: content.substring(0, 100), referenceId: chatId, referenceModel: 'Chat' });
+      await Notification.create({ recipient: userId, type: 'message', title: 'New message', message: cleanContent.substring(0, 100), referenceId: chatId, referenceModel: 'Chat' });
     }
     return success(res, 'Message sent', { message: populated }, 201);
   } catch (err) {

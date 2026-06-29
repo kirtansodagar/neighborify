@@ -1,6 +1,7 @@
 import Listing from '../models/Listing.js';
 import { success, error } from '../utils/apiResponse.js';
 import { paginate } from '../utils/apiResponse.js';
+import { sanitizeTitle, sanitizeBody } from '../utils/sanitize.js';
 
 export const createListing = async (req, res) => {
   try {
@@ -8,8 +9,10 @@ export const createListing = async (req, res) => {
     if (!title || typeof title !== 'string') return error(res, 'Title required', 400);
     const trimmedTitle = title.trim().substring(0, 200);
     const trimmedDesc = description ? String(description).trim().substring(0, 5000) : '';
+    const cleanTitle = sanitizeTitle(trimmedTitle);
+    const cleanDesc = sanitizeBody(trimmedDesc);
     const listing = await Listing.create({
-      title: trimmedTitle, description: trimmedDesc, price: Number(price) || 0, category, condition,
+      title: cleanTitle, description: cleanDesc, price: Number(price) || 0, category, condition,
       seller: req.user._id, pincode: req.user.pincode,
       expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     });
